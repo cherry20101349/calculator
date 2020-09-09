@@ -8,7 +8,7 @@
             <li
               v-for="(row, index) in item"
               :key="index"
-              @click="operateNum(row)"
+              @click="onClick(row)"
             >
               {{ row.content }}
             </li>
@@ -25,6 +25,7 @@ export default {
     return {
       num: "0",
       lastNum: "0",
+      status: '',
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
         row1: [
@@ -33,6 +34,7 @@ export default {
           { content: "%" },
           { content: "*" },
         ],
+        // row1: ['AC', 'DEL', '%', '*']
         row2: [
           { content: 7 },
           { content: 8 },
@@ -56,15 +58,29 @@ export default {
     };
   },
   methods: {
-    operateNum(row) {
-      var type = row.content;
-      console.log(type);
+    onClick({content}) {
+      if (typeof content === 'number') {
+        this.num += content;
+        this.num = parseFloat(this.num) + '';
+      } else {
+        switch (content) {
+          case 'AC':
+            this.num = 0;
+            break;
+          case 'DEL':
+            this.num = this.num.slice(0, this.num.length - 1);
+            this.num = !this.num ? '0' : this.num;
+            break;
+          default:
+            break;
+        }
+      }
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .content {
   height: 100%;
   position: relative;
