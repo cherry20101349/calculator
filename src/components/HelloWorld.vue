@@ -25,6 +25,7 @@ export default {
     return {
       num: "0",
       lastNum: "0",
+      // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
         row1: [
           { content: "AC" },
