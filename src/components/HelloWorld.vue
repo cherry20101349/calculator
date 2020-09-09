@@ -25,7 +25,7 @@ export default {
     return {
       num: "0",
       lastNum: "0",
-      items: {
+      items: Object.freeze({
         row1: [
           { content: "AC" },
           { content: "DEL" },
@@ -51,7 +51,7 @@ export default {
           { content: "+" },
         ],
         row5: [{ content: 0 }, { content: "." }, { content: "=" }],
-      },
+      }),
     };
   },
   methods: {
