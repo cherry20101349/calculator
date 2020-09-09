@@ -63,42 +63,40 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content {
   height: 100%;
   position: relative;
   font-size: 0.52rem;
-}
-.content .wrapper {
-  padding: 0 0.3rem;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-.content .wrapper > div {
-  text-align: right;
-  padding: 0.5rem 0.3rem;
-  font-size: 0.8rem;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-.item_ul {
-  display: flex;
-  justify-content: space-between;
-}
-.item_ul li {
-  border-radius: 50%;
-  border: 1px solid #ffffff;
-  width: 1.4rem;
-  height: 1.4rem;
-  line-height: 1.3rem;
-  margin-bottom: 0.2rem;
-}
-.row_ul li:last-of-type li:first-of-type {
-  width: 3.3rem;
-  border-radius: 50rem;
+  .wrapper {
+    padding: 0 0.3rem;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    > div {
+      text-align: right;
+      padding: 0.5rem 0.3rem;
+      font-size: 0.8rem;
+    }
+  }
+  .row_ul {
+    li:last-of-type li:first-of-type {
+      width: 3.3rem;
+      border-radius: 50rem;
+    }
+    .item_ul {
+      display: flex;
+      justify-content: space-between;
+      li {
+        border-radius: 50%;
+        border: 1px solid #ffffff;
+        width: 1.4rem;
+        height: 1.4rem;
+        line-height: 1.3rem;
+        margin-bottom: 0.2rem;
+      }
+    }
+  }
 }
 </style>
