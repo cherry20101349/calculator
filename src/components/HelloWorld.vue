@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="wrapper">
-      <div>{{ num }}</div>
+      <div>{{ num === '0' ? lastNum : num }}</div>
       <ul class="row_ul">
         <li v-for="(item, index) in items" :key="index">
           <ul class="item_ul">
@@ -23,9 +23,8 @@
 export default {
   data() {
     return {
-      num: "0",
-      lastNum: "0",
-      status: '',
+      num: '0',
+      lastNum: 0,
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
         row1: [
@@ -59,18 +58,28 @@ export default {
   },
   methods: {
     onClick({content}) {
+      console.log(content);
       if (typeof content === 'number') {
         this.num += content;
         this.num = parseFloat(this.num) + '';
       } else {
         switch (content) {
           case 'AC':
-            this.num = 0;
+            this.num = '0';
+            this.lastNum = 0;
             break;
           case 'DEL':
             this.num = this.num.slice(0, this.num.length - 1);
             this.num = !this.num ? '0' : this.num;
             break;
+          case '+':
+            this.lastNum = parseFloat(this.num) + parseFloat(this.lastNum);
+            this.num = '0';
+            break;
+          // case '-':
+          //   this.lastNum = parseFloat(this.lastNum) - parseFloat(this.num);
+          //   this.num = '0';
+          //   break;
           default:
             break;
         }
