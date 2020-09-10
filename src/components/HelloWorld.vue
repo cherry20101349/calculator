@@ -77,6 +77,7 @@ export default {
       ) {
         this.operation();
       } else {
+        this.count === 0;
         this.lastOperation = "+";
         this.lastNum = this.isFirstClick
           ? parseFloat(this.num)
@@ -94,6 +95,7 @@ export default {
       ) {
         this.operation();
       } else {
+        this.count === 0;
         this.lastOperation = "-";
         this.lastNum = this.isFirstClick
           ? parseFloat(this.num)
@@ -106,10 +108,10 @@ export default {
       this.count++;
       switch (this.lastOperation) {
         case "+":
-          this.add();
+          this.add(this.lastOperation);
           break;
         case "-":
-          this.reduce();
+          this.reduce(this.lastOperation);
           break;
         default:
           break;
