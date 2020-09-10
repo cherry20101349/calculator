@@ -143,6 +143,12 @@ export default {
       width: 3.3rem;
       border-radius: 50rem;
     }
+    li:first-of-type {
+      li {
+        background: grey;
+        border: 1px solid grey;
+      }
+    }
     .item_ul {
       display: flex;
       justify-content: space-between;
@@ -153,6 +159,10 @@ export default {
         height: 1.4rem;
         line-height: 1.3rem;
         margin-bottom: 0.2rem;
+        &:last-of-type {
+          background: orange;
+          border: 1px solid orange;
+        }
       }
     }
   }
