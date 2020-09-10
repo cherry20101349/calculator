@@ -23,6 +23,7 @@ export default {
       lastNum: 0,
       isFirstClick: true,
       lastOperation: "",
+      count: 0,
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
         row1: ["AC", "DEL", "%", "*"],
@@ -41,12 +42,10 @@ export default {
       } else {
         switch (content) {
           case "AC":
-            this.num = "0";
-            this.lastNum = 0;
+            this.empty();
             break;
           case "DEL":
-            this.num = this.num.slice(0, this.num.length - 1);
-            this.num = !this.num ? "0" : this.num;
+            this.delete();
             break;
           case "+":
             this.add(content);
@@ -59,24 +58,52 @@ export default {
         }
       }
     },
-    add() {
-      // this.operation(content);
-      this.lastOperation = "+";
-      this.lastNum = this.isFirstClick
-        ? parseFloat(this.num)
-        : parseFloat(this.num) + parseFloat(this.lastNum);
+    // 清空
+    empty() {
       this.num = "0";
+      this.lastNum = 0;
     },
-    reduce() {
-      // this.operation(content);
-      this.lastOperation = "-";
-      this.lastNum = this.isFirstClick
-        ? parseFloat(this.num)
-        : parseFloat(this.lastNum) - parseFloat(this.num);
-      this.isFirstClick = false;
-      this.num = "0";
+    // 删除
+    delete() {
+      this.num = this.num.slice(0, this.num.length - 1);
+      this.num = !this.num ? "0" : this.num;
+    },
+    // 加法
+    add(content) {
+      if (
+        this.count === 0 &&
+        this.lastOperation &&
+        content !== this.lastOperation
+      ) {
+        this.operation();
+      } else {
+        this.lastOperation = "+";
+        this.lastNum = this.isFirstClick
+          ? parseFloat(this.num)
+          : parseFloat(this.num) + parseFloat(this.lastNum);
+        this.isFirstClick = false;
+        this.num = "0";
+      }
+    },
+    // 减法
+    reduce(content) {
+      if (
+        this.count === 0 &&
+        this.lastOperation &&
+        content !== this.lastOperation
+      ) {
+        this.operation();
+      } else {
+        this.lastOperation = "-";
+        this.lastNum = this.isFirstClick
+          ? parseFloat(this.num)
+          : parseFloat(this.lastNum) - parseFloat(this.num);
+        this.isFirstClick = false;
+        this.num = "0";
+      }
     },
     operation() {
+      this.count++;
       switch (this.lastOperation) {
         case "+":
           this.add();
