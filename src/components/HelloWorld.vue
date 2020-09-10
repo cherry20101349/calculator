@@ -1,16 +1,12 @@
 <template>
   <div class="content">
     <div class="wrapper">
-      <div>{{ num === '0' ? lastNum : num }}</div>
+      <div>{{ num === "0" ? lastNum : num }}</div>
       <ul class="row_ul">
         <li v-for="(item, index) in items" :key="index">
           <ul class="item_ul">
-            <li
-              v-for="(row, index) in item"
-              :key="index"
-              @click="onClick(row)"
-            >
-              {{ row.content }}
+            <li v-for="(row, index) in item" :key="index" @click="onClick(row)">
+              {{ row }}
             </li>
           </ul>
         </li>
@@ -23,66 +19,73 @@
 export default {
   data() {
     return {
-      num: '0',
+      num: "0",
       lastNum: 0,
+      isFirstClick: true,
+      lastOperation: "",
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
-        row1: [
-          { content: "AC" },
-          { content: "DEL" },
-          { content: "%" },
-          { content: "*" },
-        ],
-        // row1: ['AC', 'DEL', '%', '*']
-        row2: [
-          { content: 7 },
-          { content: 8 },
-          { content: 9 },
-          { content: "*" },
-        ],
-        row3: [
-          { content: 4 },
-          { content: 5 },
-          { content: 6 },
-          { content: "-" },
-        ],
-        row4: [
-          { content: 1 },
-          { content: 2 },
-          { content: 3 },
-          { content: "+" },
-        ],
-        row5: [{ content: 0 }, { content: "." }, { content: "=" }],
+        row1: ["AC", "DEL", "%", "*"],
+        row2: [7, 8, 9, "*"],
+        row3: [4, 5, 6, "-"],
+        row4: [1, 2, 3, "+"],
+        row5: [0, ".", "="],
       }),
     };
   },
   methods: {
-    onClick({content}) {
-      console.log(content);
-      if (typeof content === 'number') {
+    onClick(content) {
+      if (typeof content === "number") {
         this.num += content;
-        this.num = parseFloat(this.num) + '';
+        this.num = parseFloat(this.num) + ""; // 去掉首位数字为0
       } else {
         switch (content) {
-          case 'AC':
-            this.num = '0';
+          case "AC":
+            this.num = "0";
             this.lastNum = 0;
             break;
-          case 'DEL':
+          case "DEL":
             this.num = this.num.slice(0, this.num.length - 1);
-            this.num = !this.num ? '0' : this.num;
+            this.num = !this.num ? "0" : this.num;
             break;
-          case '+':
-            this.lastNum = parseFloat(this.num) + parseFloat(this.lastNum);
-            this.num = '0';
+          case "+":
+            this.add(content);
             break;
-          // case '-':
-          //   this.lastNum = parseFloat(this.lastNum) - parseFloat(this.num);
-          //   this.num = '0';
-          //   break;
+          case "-":
+            this.reduce(content);
+            break;
           default:
             break;
         }
+      }
+    },
+    add() {
+      // this.operation(content);
+      this.lastOperation = "+";
+      this.lastNum = this.isFirstClick
+        ? parseFloat(this.num)
+        : parseFloat(this.num) + parseFloat(this.lastNum);
+      this.num = "0";
+    },
+    reduce() {
+      // this.operation(content);
+      this.lastOperation = "-";
+      this.lastNum = this.isFirstClick
+        ? parseFloat(this.num)
+        : parseFloat(this.lastNum) - parseFloat(this.num);
+      this.isFirstClick = false;
+      this.num = "0";
+    },
+    operation() {
+      switch (this.lastOperation) {
+        case "+":
+          this.add();
+          break;
+        case "-":
+          this.reduce();
+          break;
+        default:
+          break;
       }
     },
   },
