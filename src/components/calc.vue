@@ -48,7 +48,12 @@ export default {
     onClick(content) {
       this.activeRow = content;
       if (typeof content === "number") {
-        if (this.operator) {
+        if (this.operator === '=') {
+          this.prevNum = content + '';
+          this.operator = '';
+          return;
+        }
+        if (['+', '-', '*', '/', '%'].includes(this.operator)) {
           this.nextNum += content;
           // 去掉首位数字为0
           this.nextNum = parseFloat(this.nextNum) + "";
@@ -66,27 +71,30 @@ export default {
           }
         } else {
           // this.operator = '';
-        }
-        switch (content) {
-          case "AC":
-            this.empty();
-            break;
-          case "DEL":
-            this.delete();
-            break;
-          default:
-            break;
+          switch (content) {
+            case "AC":
+              this.empty();
+              break;
+            case "DEL":
+              this.delete();
+              break;
+            case '=':
+              this.calc(content);
+              break;
+            default:
+              break;
+          }
         }
       }
     },
     // 清空
     empty() {
       this.prevNum = '0';
-      this.nextNum = '0';
+      this.nextNum = null;
     },
     // 删除
     delete() {
-      if (this.operator) {
+      if (this.nextNum) {
         this.nextNum = this.nextNum.slice(0, this.nextNum.length - 1);
         this.nextNum = !this.nextNum ? '0' : this.nextNum;
       } else {
@@ -112,6 +120,7 @@ export default {
           this.prevNum = parseFloat(this.prevNum) % parseFloat(this.nextNum);
           break;
       }
+      this.prevNum += '';
       this.nextNum = null;
       this.operator = content;
     },
