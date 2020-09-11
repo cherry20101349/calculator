@@ -5,7 +5,12 @@
       <ul class="row_ul">
         <li v-for="(item, index) in items" :key="index">
           <ul class="item_ul">
-            <li v-for="(row, index) in item" :key="index" @click="onClick(row)">
+            <li
+              v-for="(row, index) in item"
+              :key="index"
+              :class="{ active: row === activeRow }"
+              @click="onClick(row)"
+            >
               {{ row }}
             </li>
           </ul>
@@ -24,6 +29,7 @@ export default {
       isFirstClick: true,
       lastOperation: "",
       count: 0,
+      activeRow: "",
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
       items: Object.freeze({
         row1: ["AC", "DEL", "%", "*"],
@@ -36,6 +42,7 @@ export default {
   },
   methods: {
     onClick(content) {
+      this.activeRow = content;
       if (typeof content === "number") {
         this.num += content;
         this.num = parseFloat(this.num) + ""; // 去掉首位数字为0
@@ -139,29 +146,36 @@ export default {
     }
   }
   .row_ul {
-    li:last-of-type li:first-of-type {
-      width: 3.3rem;
-      border-radius: 50rem;
-    }
-    li:first-of-type {
-      li {
-        background: grey;
-        border: 1px solid grey;
+    > li {
+      &:last-of-type li:first-of-type {
+        width: 3.3rem;
+        border-radius: 50rem;
       }
-    }
-    .item_ul {
-      display: flex;
-      justify-content: space-between;
-      li {
-        border-radius: 50%;
-        border: 1px solid #ffffff;
-        width: 1.4rem;
-        height: 1.4rem;
-        line-height: 1.3rem;
-        margin-bottom: 0.2rem;
-        &:last-of-type {
-          background: orange;
-          border: 1px solid orange;
+      &:first-of-type {
+        li {
+          background: grey;
+          border: 1px solid grey !important;
+        }
+      }
+      .item_ul {
+        display: flex;
+        justify-content: space-between;
+        li {
+          border-radius: 50%;
+          border: 1px solid #ffffff;
+          width: 1.4rem;
+          height: 1.4rem;
+          line-height: 1.3rem;
+          margin-bottom: 0.2rem;
+          &:last-of-type {
+            background: orange;
+            border: 1px solid orange;
+          }
+          &.active {
+            background: #ffffff;
+            border: 1px solid #ffffff;
+            color: orange;
+          }
         }
       }
     }
