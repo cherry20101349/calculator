@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       prevNum: "0",
-      nextNum: null,
+      nextNum: 0,
       operator: '',
       activeRow: "",
       // 使用Object.freeze，vue不会对items里的object做getter、setter绑定，可优化速度，提升性能
@@ -47,7 +47,7 @@ export default {
   methods: {
     onClick(content) {
       this.activeRow = content;
-      if (typeof content === "number") {
+      if (typeof content === "number" || content === '.') {
         if (this.operator === '=') {
           this.prevNum = content + '';
           this.operator = '';
@@ -56,11 +56,11 @@ export default {
         if (['+', '-', '*', '/', '%'].includes(this.operator)) {
           this.nextNum += content;
           // 去掉首位数字为0
-          this.nextNum = parseFloat(this.nextNum) + "";
+          this.nextNum = content !== '.' ? parseFloat(this.nextNum) + "" : this.nextNum;
         } else {
           this.prevNum += content;
           // 去掉首位数字为0
-          this.prevNum = parseFloat(this.prevNum) + "";
+          this.prevNum = content !== '.' ? parseFloat(this.prevNum) + "" : this.prevNum;
         }
       } else {
         if (['+', '-', '*', '/', '%'].includes(content)) {
@@ -70,10 +70,9 @@ export default {
             this.operator = content;
           }
         } else {
-          // this.operator = '';
           switch (content) {
             case "AC":
-              this.empty();
+              this.clear();
               break;
             case "DEL":
               this.delete();
@@ -88,9 +87,10 @@ export default {
       }
     },
     // 清空
-    empty() {
+    clear() {
       this.prevNum = '0';
-      this.nextNum = null;
+      this.nextNum = 0;
+      this.operator = '';
     },
     // 删除
     delete() {
@@ -121,7 +121,7 @@ export default {
           break;
       }
       this.prevNum += '';
-      this.nextNum = null;
+      this.nextNum = 0;
       this.operator = content;
     },
   },
